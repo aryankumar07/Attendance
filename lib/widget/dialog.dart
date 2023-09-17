@@ -2,8 +2,12 @@ import 'package:flutter/material.dart';
 
 class DialogItems extends StatelessWidget{
 
-  DialogItems({super.key,required this.onCancel,required this.controller});
+  DialogItems({super.key,
+  required this.onCancel,
+  required this.controller,
+  required this.onSave});
   
+  VoidCallback onSave;
   VoidCallback onCancel;
   final controller;
 
@@ -23,7 +27,7 @@ class DialogItems extends StatelessWidget{
             Row(
               children: [
                 IconButton(
-                  onPressed: (){},
+                  onPressed: onSave,
                  icon: Icon(Icons.add)),
                  Spacer(),
                  IconButton(

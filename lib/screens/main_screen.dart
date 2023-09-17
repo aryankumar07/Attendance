@@ -1,7 +1,9 @@
+import 'package:attendance/database_file/Database.dart';
 import 'package:attendance/widget/data_items.dart';
 import 'package:flutter/material.dart';
 import 'package:attendance/data/data.dart';
 import 'package:attendance/widget/dialog.dart';
+import 'package:hive/hive.dart';
 
 class MainScreen  extends StatefulWidget{
 
@@ -17,12 +19,52 @@ class MainScreen  extends StatefulWidget{
 
 class _MainScreenState extends State<MainScreen>{
 
-  final List<Data> _dataList = [
-    Data(className: "Microwave", bunked: 2, attended: 6, type: Type.theory),
-    Data(className: "Dsp", bunked: 1, attended: 6, type: Type.theory),
-  ];
+  final _mybox = Hive.box('Mybox');
+
+  DataBase db = DataBase();
+
+  @override
+  void initState() {
+    
+    if(_mybox.get("TODOLIST") == null){
+      db.createInitails();
+    }else{
+      db.loadData();
+    }
+
+    super.initState();
+  }
+
+ 
 
   final _textController = TextEditingController();
+
+
+  void addNewSubject(){
+    if(_textController.text.isEmpty){
+      showDialog(
+        context: context,
+       builder: (context) => AlertDialog(
+        content: Text("Enter a Valid Subject Name"),
+        actions: [
+          TextButton(onPressed: (){
+            Navigator.pop(context);
+          }, child: Text("Ok"))
+        ],
+       ));
+    }else{
+      setState(() {
+        print("object");
+        db.toDoList.add(Data(
+          className: _textController.text,
+        attended: 0,
+        bunked: 0, type: Type.lab));
+        _textController.text = "";
+        Navigator.pop(context);
+      });
+    }
+    db.updateData();
+  }
 
 
 
@@ -33,12 +75,20 @@ class _MainScreenState extends State<MainScreen>{
        builder: (context) {
         return DialogItems(
           controller: _textController,
+          onSave: addNewSubject,
           onCancel: () {
             _textController.text = "";
             Navigator.pop(context);
           },
         );
        });
+  }
+
+  void performDelete(int index){
+    setState(() {
+      db.toDoList.removeAt(index);
+    });
+    db.updateData();
   }
 
 
@@ -54,11 +104,12 @@ class _MainScreenState extends State<MainScreen>{
         ],
       ),
       body: ListView.builder(
-        itemCount: _dataList.length,
-        itemBuilder: (ctx,index) => DataItem(
-          classname: _dataList[index].className,
-          clasbunked: _dataList[index].bunked,
-          classgone: _dataList[index].attended,
+        itemCount: db.toDoList.length,
+        itemBuilder: (ctx,index) => DateItem(classname: db.toDoList[index].className,
+        attended: db.toDoList[index].attended,
+        bunked: db.toDoList[index].bunked,
+        percent: db.toDoList[index].calculatedPercentage,
+        deleteFunction: (context) => performDelete(index),
         )),
     );
   }
