@@ -9,14 +9,14 @@ class DateItem extends StatefulWidget{
   DateItem({super.key,required this.classname,
   required this.attended,
   required this.bunked,
-  required this.percent,
   required this.deleteFunction,
+  required this.percent
   });
 
   final String classname;
   final int attended;
   final int bunked;
-  final int percent;
+  int percent;
   Function(BuildContext)? deleteFunction;
 
   @override
@@ -24,8 +24,8 @@ class DateItem extends StatefulWidget{
     return _DateItemState(className: classname,
     attended: attended,
     bunked: bunked,
-    percent: percent,
     deleteFunction: deleteFunction,
+    percent: percent,
     );
   }
 }
@@ -36,11 +36,13 @@ class _DateItemState extends State<DateItem>{
 
     DataBase db = DataBase();
 
+    Color _colorContainer = Colors.grey;
+
   _DateItemState({required this.className,
   required this.attended,
   required this.bunked,
-  required this.percent,
   required this.deleteFunction,
+  required this.percent,
   });
 
   final String className;
@@ -49,14 +51,25 @@ class _DateItemState extends State<DateItem>{
   int percent;
   Function(BuildContext)? deleteFunction;
 
-  void updateper(){
-    percent = ((attended/(attended+bunked))*100).round();
+  Color changeColor(){
+    if(percent >= 75){
+        return  Colors.blueAccent;
+      }
+      else if(percent > 40 && percent < 75){
+        return  Colors.orangeAccent;
+      }
+      else if( percent < 40){
+        return  Colors.red;
+      }
+
+      return Colors.grey;
   }
 
   void incValattended(){
     setState(() {
       attended += 1;
-      updateper();
+      percent = ((attended/(attended+bunked))*100).round();
+      _colorContainer = changeColor();
     });
     db.updateData();
   }
@@ -64,7 +77,8 @@ class _DateItemState extends State<DateItem>{
   void incValbunked(){
     setState(() {
       bunked += 1;
-      updateper();
+      percent = ((attended/(attended+bunked))*100).round();
+      _colorContainer = changeColor();
     });
     db.updateData();
   }
@@ -75,7 +89,8 @@ class _DateItemState extends State<DateItem>{
       if(attended<0){
         attended  = 0;
       }
-      updateper();
+      percent = ((attended/(attended+bunked))*100).round();
+      _colorContainer = changeColor();
     });
   }
 
@@ -85,7 +100,9 @@ class _DateItemState extends State<DateItem>{
       if(bunked<0){
         bunked  = 0;
       }
-      updateper();
+      percent = ((attended/(attended+bunked))*100).round();
+      _colorContainer = changeColor();
+      
     });
     db.updateData();
   }
@@ -109,7 +126,7 @@ class _DateItemState extends State<DateItem>{
         child: Container(
           padding: EdgeInsets.all(20),
           decoration: BoxDecoration(
-            color: Colors.deepOrangeAccent,
+            color: changeColor(),
             borderRadius: BorderRadius.circular(12),
           ),
           
@@ -159,7 +176,7 @@ class _DateItemState extends State<DateItem>{
                 children: [
                   Text("Percentage Attendance"),
                   SizedBox(width: 16,),
-                  Text("$percent%")
+                  Text('$percent%'),
                 ],
               )
       

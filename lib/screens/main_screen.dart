@@ -55,10 +55,9 @@ class _MainScreenState extends State<MainScreen>{
     }else{
       setState(() {
         print("object");
-        db.toDoList.add(Data(
-          className: _textController.text,
-        attended: 0,
-        bunked: 0, type: Type.lab));
+        db.toDoList.add(
+          [_textController.text,0,0,0],
+        );
         _textController.text = "";
         Navigator.pop(context);
       });
@@ -105,11 +104,11 @@ class _MainScreenState extends State<MainScreen>{
       ),
       body: ListView.builder(
         itemCount: db.toDoList.length,
-        itemBuilder: (ctx,index) => DateItem(classname: db.toDoList[index].className,
-        attended: db.toDoList[index].attended,
-        bunked: db.toDoList[index].bunked,
-        percent: db.toDoList[index].calculatedPercentage,
-        deleteFunction: (context) => performDelete(index),
+        itemBuilder: (ctx,index) => DateItem(classname: db.toDoList[index][0],
+        attended: db.toDoList[index][1],
+        bunked: db.toDoList[index][2],
+        percent: db.toDoList[index][3],
+        deleteFunction: (ctx) => performDelete(index),
         )),
     );
   }

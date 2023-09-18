@@ -9,8 +9,8 @@ class DataBase {
 
  void createInitails(){
   toDoList = [
-    Data(className: "Microwave",attended: 3,bunked:5,type: Type.theory),
-    Data(className: "Dsp",attended: 5,bunked: 4, type: Type.theory),
+    ["Default 1",3,5,38],
+    ["Default 2",4,5,44]
   ];
  }
 
