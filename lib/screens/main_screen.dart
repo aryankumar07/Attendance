@@ -1,5 +1,6 @@
 import 'package:attendance/database_file/Database.dart';
 import 'package:attendance/widget/data_items.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:attendance/data/data.dart';
 import 'package:attendance/widget/dialog.dart';
@@ -100,6 +101,11 @@ class _MainScreenState extends State<MainScreen>{
           IconButton(
             onPressed: createNew,
              icon: Icon(Icons.add)),
+          IconButton(
+            onPressed: (){
+              FirebaseAuth.instance.signOut();
+            },
+              icon: Icon(Icons.logout)),
         ],
       ),
       body: ListView.builder(

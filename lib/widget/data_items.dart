@@ -138,13 +138,13 @@ class _DateItemState extends State<DateItem>{
                 children: [
                   Text("Class Attended"),
                   SizedBox(width: 16,),
-                  Text("$attended"),
                   Spacer(),
                   Row(
                     children: [
                       IconButton(
                         onPressed: incValattended,
                          icon: Icon(Icons.add)),
+                         Text("$attended"),
                          IconButton(
                         onPressed: decValAttended,
                        icon: Icon(Icons.remove)),
@@ -157,13 +157,13 @@ class _DateItemState extends State<DateItem>{
                 children: [
                   Text("Class Bunked"),
                   SizedBox(width: 16,),
-                  Text("$bunked"),
                   Spacer(),
                   Row(
                     children: [
                       IconButton(
                         onPressed: incValbunked,
                          icon: Icon(Icons.add)),
+                      Text("$bunked"),
                       IconButton(
                         onPressed: decValBunked,
                        icon: Icon(Icons.remove)),
@@ -175,8 +175,9 @@ class _DateItemState extends State<DateItem>{
               Row(
                 children: [
                   Text("Percentage Attendance"),
-                  SizedBox(width: 16,),
+                  Spacer(),
                   Text('$percent%'),
+                  SizedBox(width: 32,)
                 ],
               )
       
