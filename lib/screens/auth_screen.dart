@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 final _firebase = FirebaseAuth.instance;
 
 class AuthScreen extends StatefulWidget{
@@ -31,6 +32,16 @@ class _AuthScreenState extends State<AuthScreen>{
       }else{
         final userCredentials = await _firebase.createUserWithEmailAndPassword(
           email: _enteredemail, password: _enteredpassword);
+
+          await FirebaseFirestore.instance
+          .collection('user')
+          .doc(userCredentials.user!.uid)
+          .set({
+            'Email':_enteredemail,
+            'password':_enteredpassword,
+          });
+
+
       }
     }on FirebaseAuthException catch (error){
       ScaffoldMessenger.of(context).clearSnackBars();

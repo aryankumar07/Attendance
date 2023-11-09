@@ -1,5 +1,7 @@
 import 'package:attendance/database_file/Database.dart';
 import 'package:attendance/widget/data_items.dart';
+import 'package:attendance/widget/profile.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:attendance/data/data.dart';
@@ -39,6 +41,18 @@ class _MainScreenState extends State<MainScreen>{
  
 
   final _textController = TextEditingController();
+
+  void showProfile(){
+    showDialog(context: context
+    , builder: (ctx) => AlertDialog(
+      content: Container(
+        width: 300,
+        height: 300,
+        color: Colors.amber,
+        child: Center(child: GetData(FirebaseAuth.instance.currentUser!.uid)),
+      ),
+    ));
+  }
 
 
   void addNewSubject(){
@@ -106,6 +120,8 @@ class _MainScreenState extends State<MainScreen>{
               FirebaseAuth.instance.signOut();
             },
               icon: Icon(Icons.logout)),
+          IconButton(onPressed: showProfile,
+           icon: Icon(Icons.person)),
         ],
       ),
       body: ListView.builder(
